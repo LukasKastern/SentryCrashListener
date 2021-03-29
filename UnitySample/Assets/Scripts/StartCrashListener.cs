@@ -111,12 +111,14 @@ public class StartCrashListener : MonoBehaviour
         Process.Start( psi );
     }
 
+	private const string KDsn = "";
+
     private static string GetArgs( )
     {
         var args = "";
         
-        args += "https://5a81b3b3bef549f19ccf506b8aaac872@o560177.ingest.sentry.io/5695538" + "   ";
-        args += Process.GetCurrentProcess().Id.ToString() + "   ";
+        args += $"{KDsn}  ";
+        args += Process.GetCurrentProcess().Id + "  ";
         args += "\"" + Path.Combine( Path.GetTempPath( ), Application.companyName, Application.productName, "Crashes" ) + "\"" + "   ";
         var gameInfoAsString = JsonConvert.SerializeObject( new GameInfo( ) );
 
