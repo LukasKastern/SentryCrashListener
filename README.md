@@ -10,3 +10,6 @@ When that is done you can build the project and run it.
 You'll see a crash button which will use Unity's ForceCrash method to cause an access violation.
 
 When you click that and everything works correctly you will get the crashlog, playerlog and dump file send as a sentry issue.
+
+Note:
+This currently only supports windows 
