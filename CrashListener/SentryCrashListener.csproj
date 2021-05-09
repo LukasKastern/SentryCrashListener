@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
-		<PublishTrimmed>true</PublishTrimmed>
-
+        <TargetFramework>net48</TargetFramework>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <OutputType>WinExe</OutputType>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -19,6 +20,18 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="Sentry" Version="3.2.0" />
       <PackageReference Include="System.Management" Version="6.0.0-preview.2.21154.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="SentryCrashListener\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="SentryCrashListener\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="SentryCrashListener\**" />
     </ItemGroup>
 
 </Project>

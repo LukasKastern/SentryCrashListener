@@ -32,7 +32,7 @@ namespace SentryCrashListener
         {
             if (!Directory.Exists( crashDirectoriesPath ))
             {
-                Console.Write( $"File doesn't exit: {crashDirectoriesPath}" );
+                Logger.Write( $"[CrashReporter] File doesn't exit: {crashDirectoriesPath}" );
                 // No crashes reported
                 return;
             }
@@ -46,14 +46,14 @@ namespace SentryCrashListener
 
             if (crashDirectory == null)
             {
-                Console.WriteLine( "Couldn't find crash directory" );
+                Logger.Write( $"[CrashReporter] Couldn't find crash directory" );
                 return;
             }
 
             var timeSinceAccess = DateTime.Now - crashDirectory.LastWriteTime;
             if (timeSinceAccess.TotalSeconds > m_reportCrashIfYoungerThen)
             {
-                Console.WriteLine($"Crash directory is to old: {crashDirectory.LastWriteTime}, Now: {DateTime.Now}");
+                Logger.Write( $"[CrashReporter] Crash directory is to old: {crashDirectory.LastWriteTime}, Now: {DateTime.Now}" );
                 return;
             }
             
@@ -66,19 +66,30 @@ namespace SentryCrashListener
             using (SentrySdk.Init( m_dsn ))
             {                
                 var scope = CreateScopeFromGameInfo( m_gameInfo );
-                
-                scope.AddAttachment( dmp );
-                scope.AddAttachment( error );
-                scope.AddAttachment( log );
+
+                if (File.Exists( dmp ))
+                    scope.AddAttachment( dmp );
+                if (File.Exists( error ))
+                    scope.AddAttachment( error );
+                if (File.Exists( log ))
+                    scope.AddAttachment( log );
 
                 var sentryEvent = new SentryEvent
                 {
                     Message = ExtractErrorMessageFromLog(error)
                 };
          
-                Console.WriteLine( $"Sending crash originating from {crashPath}" );
+                Logger.Write( $"[CrashReporter] Sending crash originating from {crashPath}" );
 
-                SentrySdk.CaptureEvent( sentryEvent, scope );
+                try
+                {
+                    SentrySdk.CaptureEvent( sentryEvent, scope );
+
+                }
+                catch (Exception e)
+                {
+                    Logger.Write( e.Message );
+                }
             }
         }
             
