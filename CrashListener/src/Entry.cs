@@ -33,7 +33,7 @@ namespace SentryCrashListener
                 var gameInfo = JsonConvert.DeserializeObject<GameInfo>( gameInfoArg );
             
                 Logger.Write( "[Entry] Starting crash reporter now" );
-                var crashReporter = new CrashReporter( gameInfo, dsn, 500000000 );
+                var crashReporter = new CrashReporter( gameInfo, dsn, 60 );
             
                 Logger.Write( "[Entry] Starting crash listener now" );
                 var unityCrashReporter = new UnityCrashReporterListener( );
